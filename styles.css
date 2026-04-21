@@ -7,43 +7,44 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 :root {
-  /* CRT/Y2K Cohesive Color Palette with Black Domination */
-  --mc-red: #000000; /* Black - Dominant */
-  --mc-dark-red: #D64065; /* Deep Rose */
-  --mc-pink: #87CEEB; /* Ice Blue */
-  --mc-light-pink: #E8A0BF; /* Soft Mauve */
-  --mc-white: #F5F5F5;
-  --mc-green: #87CEEB; /* Ice Blue */
-  --mc-dark-green: #9D84B7; /* Soft Lavender */
-  --mc-grass-green: #00E5FF; /* Bright Cyan */
-  --mc-stone: #F5F5F5;
-  --mc-dark-stone: #000000; /* Black */
-  --mc-dirt: #E8A0BF;
-  --mc-dark: #000000;
-  --mc-obsidian: #0F1419;
-  --mc-gold: #00E5FF; /* Bright Cyan */
+  --mc-red: #D4688A;
+  --mc-dark-red: #B84F70;
+  --mc-pink: #A8D8EA;
+  --mc-light-pink: #7BB8D4;
+  --mc-white: #E8EEF4;
+  --mc-green: #1A3A5C;
+  --mc-dark-green: #0D2238;
+  --mc-grass-green: #1E4D7A;
+  --mc-stone: #0F1A2E;
+  --mc-dark-stone: #080D18;
+  --mc-dirt: #A8D8EA;
+  --mc-dark: #080D18;
+  --mc-obsidian: #04060F;
+  --mc-gold: #B8C4CC;
 
-  /* Semantic tokens - Black Dominant Theme */
-  --soft-bg: #000000; /* Pure Black background */
-  --text-main: #F5F5F5; /* Off-white text */
-  --theme-color: #00E5FF; /* Bright Cyan */
-  --text-color: #87CEEB; /* Ice Blue */
-  --card-bg: rgba(0, 0, 0, 0.95); /* Black card */
-  --highlight-bg: rgba(135, 206, 235, 0.15); /* Ice Blue highlight */
-  --highlight-text: #87CEEB; /* Ice Blue */
-  --marker-color: #D64065; /* Deep Rose */
-  --pixel-red: #000000;
-  --pixel-pink: #E8A0BF;
-  --pixel-dark: #000000;
-  --paper-bg: #FFFFFF;
-  --mc-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-  --mc-shadow-lg: 4px 4px 8px rgba(0, 0, 0, 0.3);
-  --mc-border: 2px solid #DC143C; /* Crimson border */
-  --mc-border-thick: 3px solid #DC143C;
+  --soft-bg: #04060F;
+  --text-main: #E8EEF4;
+  --theme-color: #A8D8EA;
+  --text-color: #A8D8EA;
+  --card-bg: rgba(8, 13, 24, 0.96);
+  --highlight-bg: rgba(168, 216, 234, 0.08);
+  --highlight-text: #A8D8EA;
+  --marker-color: #D4688A;
+  --pixel-red: #D4688A;
+  --pixel-pink: #7BB8D4;
+  --pixel-dark: #080D18;
+  --paper-bg: #080F1A;
 
-  /* Pixel border image (Minecraft-style inset/outset) */
-  --mc-inset-shadow: inset 2px 2px 0px rgba(255,255,255,0.15), inset -2px -2px 0px rgba(0,0,0,0.3);
-  --mc-outset-shadow: inset 2px 2px 0px rgba(255,255,255,0.3), inset -2px -2px 0px rgba(0,0,0,0.4);
+  --mc-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  --mc-shadow-lg: 4px 4px 14px rgba(0, 0, 0, 0.9);
+  --mc-border: 2px solid #D4688A;
+  --mc-border-thick: 3px solid #D4688A;
+  --mc-inset-shadow: inset 2px 2px 0px rgba(168,216,234,0.07), inset -2px -2px 0px rgba(0,0,0,0.6);
+  --mc-outset-shadow: inset 2px 2px 0px rgba(168,216,234,0.10), inset -2px -2px 0px rgba(0,0,0,0.7);
+
+  --silver-light: #D0D8E0;
+  --silver-mid: #9AAAB8;
+  --silver-dark: #5A6A78;
 }
 
 * {
@@ -63,11 +64,19 @@ html, body {
 
 body {
   font-family: 'Press Start 2P', monospace;
-  background: var(--soft-bg);
+  background:
+    radial-gradient(ellipse 70% 50% at 25% 15%, rgba(26, 58, 92, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 35% at 75% 85%, rgba(212, 104, 138, 0.08) 0%, transparent 60%),
+    var(--soft-bg);
   color: var(--text-main);
   min-height: 100vh;
   touch-action: manipulation;
   position: relative;
+}
+
+.card:hover {
+  box-shadow: var(--mc-shadow-lg), var(--mc-inset-shadow), 0 0 20px rgba(168, 216, 234, 0.08);
+  transition: box-shadow 0.3s ease;
 }
 
 /* Soft romantic overlay */
@@ -154,7 +163,7 @@ body::after {
 /* ---- CARD ---- */
 .card {
   z-index: 1;
-  background: rgba(43, 26, 46, 0.85); /* Standard semi-transparent dark purple */
+  background: rgba(8, 14, 28, 0.85);
   border: var(--mc-border-thick);
   box-shadow: var(--mc-shadow-lg), var(--mc-inset-shadow);
   padding: 24px 16px;
@@ -163,6 +172,7 @@ body::after {
   text-align: center;
   position: relative;
 }
+
 
 #step3-valentine .card {
   background: transparent; /* Step 3 is now fully clear to see the cats */
@@ -208,7 +218,7 @@ body::after {
 }
 
 .caption {
-  font-family: 'Press Start 2P', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 10px;
   margin-bottom: 20px;
   color: var(--mc-light-pink);
@@ -225,6 +235,7 @@ body::after {
   flex-wrap: wrap;
   position: relative;
 }
+
 
 @media (max-width: 480px) {
   .btn-row {
@@ -394,7 +405,7 @@ body::after {
   font-family: 'Press Start 2P', monospace;
   font-size: clamp(8px, 2.5vw, 14px);
   text-align: center;
-  background: rgba(30, 15, 35, 0.9);
+  background: rgba(5, 10, 22, 0.9);
   padding: clamp(10px, 2vw, 18px) clamp(14px, 2.5vw, 28px);
   border: var(--mc-border-thick);
   box-shadow: var(--mc-shadow-lg), var(--mc-outset-shadow);
@@ -409,12 +420,12 @@ body::after {
 
 .instruction-voxel::before {
   content: '[ ';
-  color: var(--mc-green);
+  color: #A8D8EA;
 }
 
 .instruction-voxel::after {
   content: ' ]';
-  color: var(--mc-green);
+  color: #A8D8EA;
 }
 
 @keyframes bounceVoxel {
@@ -432,7 +443,7 @@ body::after {
   max-width: 500px;
   height: 70vh;
   max-height: 600px;
-  background: var(--mc-light-pink); /* Pastel pink */
+  background: #080F1A;
   border: 5px solid var(--mc-red);
   padding: 30px;
   box-shadow: var(--mc-shadow-lg), var(--mc-inset-shadow), 0 0 30px rgba(251, 41, 67, 0.2);
@@ -474,11 +485,11 @@ body::after {
 }
 
 .letter-content-new {
-  font-family: 'Press Start 2P', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 9px;
   font-weight: normal;
   line-height: 2.2;
-  color: var(--mc-dark-red); /* Dark red for readability on pastel pink */
+  color: #A8D8EA;
   text-align: left;
   text-shadow: 1px 1px 0px rgba(255,255,255,0.4); /* Light shadow instead of dark */
 }
@@ -535,7 +546,7 @@ body::after {
 }
 
 .caption-timer {
-  font-family: 'Press Start 2P', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 10px;
   text-align: center;
   color: var(--mc-pink);
@@ -568,9 +579,9 @@ body::after {
 .time-value {
   font-family: 'Press Start 2P', monospace;
   font-size: 24px;
-  color: var(--mc-red);
+  color: #A8D8EA;
   line-height: 1;
-  text-shadow: 2px 2px 0px rgba(0,0,0,0.5), 0 0 10px rgba(251, 41, 67, 0.3);
+  text-shadow: 2px 2px 0px rgba(0,0,0,0.7), 0 0 12px rgba(168,216,234,0.35);
 }
 
 .time-label {
@@ -585,7 +596,7 @@ body::after {
 .separator {
   font-family: 'Press Start 2P', monospace;
   font-size: 24px;
-  color: var(--mc-red);
+  color: #A8D8EA;
   margin-bottom: 16px;
   text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
   animation: separatorBlink 1s step-start infinite;
@@ -693,7 +704,7 @@ body::after {
   align-items: center;
   gap: 4px;
   color: var(--mc-pink);
-  font-family: 'Press Start 2P', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 8px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -705,12 +716,34 @@ body::after {
 .scroll-indicator-arrow {
   font-size: 16px;
   animation: bounce 1.4s step-start infinite;
-  color: var(--mc-green);
+  color: #A8D8EA;
 }
 
 @keyframes bounce {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(6px); }
+}
+
+@keyframes starFade {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0); }
+}
+
+@keyframes driftUp {
+  from { transform: translateY(0) translateX(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 0.6; }
+  to { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+}
+
+@keyframes borderShimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.4; transform: translateX(-50%) scaleX(1); }
+  50% { opacity: 0.9; transform: translateX(-50%) scaleX(1.2); }
 }
 
 .scroll-indicator.hidden {
@@ -890,8 +923,8 @@ body::after {
 }
 
 .checklist-container::-webkit-scrollbar-thumb {
-  background: var(--mc-green);
-  border: 2px solid var(--mc-dark-green);
+  background: #A8D8EA;
+  border: 2px solid #1A3A5C;
   box-shadow: inset 1px 1px 0px rgba(255,255,255,0.2);
 }
 
@@ -900,12 +933,13 @@ body::after {
   align-items: center;
   margin-bottom: 8px;
   padding: 10px;
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(8, 18, 35, 0.75);
   border: 2px solid rgba(255, 255, 255, 0.08);
   transition: all 0.15s ease;
   cursor: pointer;
   position: relative;
 }
+
 
 .promise-item:hover {
   background: rgba(255, 107, 157, 0.15);
@@ -915,8 +949,8 @@ body::after {
 
 .promise-item.checked {
   background: rgba(85, 170, 85, 0.15);
-  border-color: var(--mc-green);
-  border-left: 4px solid var(--mc-green);
+  border-color: #A8D8EA;
+  border-left: 4px solid #A8D8EA;
 }
 
 .checkbox-circle {
@@ -936,15 +970,15 @@ body::after {
 }
 
 .promise-item.checked .checkbox-circle {
-  background: var(--mc-green);
-  border-color: var(--mc-dark-green);
+  background: #1A3A5C;
+  border-color: #A8D8EA;
   color: white;
   box-shadow: var(--mc-shadow), inset 1px 1px 0px rgba(255,255,255,0.2);
   text-shadow: 1px 1px 0px rgba(0,0,0,0.5);
 }
 
 .promise-text {
-  font-family: 'Press Start 2P', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 8px;
   line-height: 1.8;
   color: var(--mc-light-pink);
@@ -955,7 +989,7 @@ body::after {
 .card,
 .container,
 .modal-content {
-  background: linear-gradient(180deg, rgba(43, 26, 46, 0.95), rgba(30, 15, 35, 0.92));
+  background: linear-gradient(180deg, rgba(8, 14, 28, 0.97), rgba(5, 10, 22, 0.95));
   border: var(--mc-border-thick);
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
@@ -967,6 +1001,7 @@ body::after {
   transition: transform 0.3s cubic-bezier(.17, .84, .44, 1);
   position: relative;
 }
+
 
 .spawn-bounce {
   animation: spawnBounce 350ms cubic-bezier(.34, .8, .4, 1);
@@ -1161,12 +1196,12 @@ body::after {
   font-family: 'Courier New', monospace;
   letter-spacing: 0.15em;
   font-weight: bold;
-  color: #D64065;
-  text-shadow: 2px 0 #87CEEB, -2px 0 #D64065, 0 0 8px rgba(214, 64, 101, 0.4);
+  color: #A8D8EA;
+  text-shadow: 2px 0 var(--silver-mid), -2px 0 #D4688A, 0 0 10px rgba(168,216,234,0.4);
   display: inline-block;
   padding: 8px 16px;
   background: rgba(15, 20, 25, 0.3);
-  border: 2px solid #87CEEB;
+  border: 2px solid #A8D8EA;
 }
 
 /* VHS wave effect */

@@ -5,14 +5,14 @@
 
 // --- CENTRAL COLOR PALETTE SYSTEM (Cohesive CRT/Y2K with Black Domination) ---
 const COLORS = {
-  black: '#000000',        // Dominant: True Black
-  iceBlue: '#87CEEB',      // Primary: Ice Blue
-  lavender: '#9D84B7',     // Secondary: Soft Lavender
-  deepRose: '#D64065',     // Accent: Deep Rose/Magenta
-  darkBase: '#0F1419',     // Dark Blue-Grey
-  offWhite: '#F5F5F5',     // White: Soft White
-  brightCyan: '#00E5FF',   // Cyan: Neon Cyan
-  softMauve: '#E8A0BF'     // Mauve: Soft Rose
+  black: '#04060F',
+  iceBlue: '#A8D8EA',
+  lavender: '#7BB8D4',
+  deepRose: '#D4688A',
+  darkBase: '#080F1A',
+  offWhite: '#E8EEF4',
+  brightCyan: '#1A3A5C',
+  softMauve: '#B84F70'
 };
 
 const COLOR_PALETTE = {
@@ -55,10 +55,10 @@ function runHeartLogic(containerId) {
   const voxelSize = 1;
   const geometry = new THREE.BoxGeometry(voxelSize, voxelSize, voxelSize);
   const materials = [
-    new THREE.MeshStandardMaterial({ color: 0x9D84B7, roughness: 0.4 }), // Lavender
-    new THREE.MeshStandardMaterial({ color: 0xE8A0BF, roughness: 0.4 }), // Soft Mauve
-    new THREE.MeshStandardMaterial({ color: 0x87CEEB, roughness: 0.4 }), // Ice Blue
-    new THREE.MeshStandardMaterial({ color: 0xD64065, roughness: 0.4 })  // Deep Rose
+    new THREE.MeshStandardMaterial({ color: 0xD4688A, roughness: 0.3 }),
+    new THREE.MeshStandardMaterial({ color: 0xB84F70, roughness: 0.4 }),
+    new THREE.MeshStandardMaterial({ color: 0xA8D8EA, roughness: 0.35 }),
+    new THREE.MeshStandardMaterial({ color: 0x1A3A5C, roughness: 0.5 }),
   ];
   const edgesGeometry = new THREE.EdgesGeometry(geometry);
   const edgesMaterial = new THREE.LineBasicMaterial({ color: 0xFFFFFF, linewidth: 2 }); // White edges
@@ -344,6 +344,259 @@ function lazyLoadImages() {
   lazyImages.forEach(img => imageObserver.observe(img));
 }
 
+// --- Ambient Interaction Animations ---
+function initGhostCursor() {
+  if (window.matchMedia('(pointer: coarse)').matches) return;
+  const ghost = document.createElement('div');
+  ghost.style.cssText = `
+    position: fixed; pointer-events: none; z-index: 99999;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(168,216,234,0.6) 0%, rgba(168,216,234,0) 70%);
+    transition: transform 0.08s ease;
+    mix-blend-mode: screen;
+  `;
+  document.body.appendChild(ghost);
+
+  const trail = [];
+  for (let i = 0; i < 8; i++) {
+    const dot = document.createElement('div');
+    dot.style.cssText = `
+      position: fixed; pointer-events: none; z-index: 99998;
+      width: ${14 - i * 1.5}px; height: ${14 - i * 1.5}px; border-radius: 50%;
+      background: rgba(168,216,234,${0.35 - i * 0.04});
+      mix-blend-mode: screen;
+      transition: left ${0.06 + i * 0.025}s ease, top ${0.06 + i * 0.025}s ease;
+    `;
+    document.body.appendChild(dot);
+    trail.push(dot);
+  }
+
+  document.addEventListener('mousemove', (e) => {
+    ghost.style.left = e.clientX - 9 + 'px';
+    ghost.style.top = e.clientY - 9 + 'px';
+    trail.forEach((dot, i) => {
+      setTimeout(() => {
+        dot.style.left = e.clientX - (7 - i * 0.75) + 'px';
+        dot.style.top = e.clientY - (7 - i * 0.75) + 'px';
+      }, i * 20);
+    });
+  }, { passive: true });
+}
+
+function initTitleGlitch() {
+  const title = document.querySelector('.title');
+  if (!title) return;
+  const original = title.textContent;
+  const chars = '█▓▒░▀▄▌▐';
+  let frame = 0;
+
+  const glitch = setInterval(() => {
+    if (frame > 12) {
+      title.textContent = original;
+      clearInterval(glitch);
+      return;
+    }
+    title.textContent = original.split('').map((c) =>
+      Math.random() < 0.15 ? chars[Math.floor(Math.random() * chars.length)] : c
+    ).join('');
+    frame++;
+  }, 80);
+}
+
+function initStarBorder(btnId) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+  btn.style.position = 'relative';
+  btn.style.overflow = 'hidden';
+
+  setInterval(() => {
+    const star = document.createElement('div');
+    const size = Math.random() * 4 + 2;
+    star.style.cssText = `
+      position: absolute;
+      width: ${size}px; height: ${size}px;
+      background: #A8D8EA;
+      border-radius: 50%;
+      pointer-events: none;
+      left: ${Math.random() * 100}%;
+      top: ${Math.random() * 100}%;
+      animation: starFade 0.8s ease-out forwards;
+      box-shadow: 0 0 ${size * 2}px rgba(168,216,234,0.8);
+    `;
+    btn.appendChild(star);
+    setTimeout(() => star.remove(), 800);
+  }, 180);
+}
+
+function initPageTransition() {
+  const overlay = document.createElement('div');
+  overlay.id = 'page-transition';
+  overlay.style.cssText = `
+    position: fixed; inset: 0; z-index: 999999;
+    background: #04060F;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  `;
+  document.body.appendChild(overlay);
+
+  window.addEventListener('load', () => {
+    overlay.style.opacity = '1';
+    setTimeout(() => { overlay.style.opacity = '0'; }, 50);
+  });
+
+  document.querySelectorAll('a.btn').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (!href || href.startsWith('#')) return;
+      e.preventDefault();
+      overlay.style.opacity = '1';
+      setTimeout(() => { window.location.href = href; }, 320);
+    });
+  });
+}
+
+function initPromiseParticles() {
+  const container = document.querySelector('#step-promises');
+  if (!container) return;
+  const layer = document.createElement('div');
+  layer.style.cssText = 'position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;';
+  container.appendChild(layer);
+
+  for (let i = 0; i < 25; i++) {
+    const p = document.createElement('div');
+    const size = Math.random() * 3 + 1;
+    p.style.cssText = `
+      position:absolute;
+      width:${size}px; height:${size}px;
+      background:rgba(168,216,234,${Math.random() * 0.4 + 0.1});
+      left:${Math.random() * 100}%;
+      bottom:${Math.random() * 100}%;
+      animation: driftUp ${12 + Math.random() * 16}s linear infinite;
+      animation-delay: -${Math.random() * 20}s;
+      box-shadow: 0 0 ${size * 3}px rgba(168,216,234,0.3);
+    `;
+    layer.appendChild(p);
+  }
+}
+
+function initHeartbeatTimer() {
+  const val = document.getElementById('days');
+  if (!val) return;
+
+  setInterval(() => {
+    val.animate([
+      { transform: 'scale(1)', filter: 'brightness(1)' },
+      { transform: 'scale(1.18)', filter: 'brightness(1.4)' },
+      { transform: 'scale(1)', filter: 'brightness(1)' },
+      { transform: 'scale(1.09)', filter: 'brightness(1.2)' },
+      { transform: 'scale(1)', filter: 'brightness(1)' },
+    ], { duration: 800, easing: 'ease-in-out' });
+  }, 2000);
+}
+
+function initTypewriter() {
+  const caption = document.querySelector('.caption');
+  if (!caption || caption.dataset.typed === 'true') return;
+  const text = caption.textContent;
+  caption.textContent = '';
+  caption.style.borderRight = '2px solid #A8D8EA';
+  caption.style.whiteSpace = 'pre-wrap';
+  caption.dataset.typed = 'true';
+
+  let i = 0;
+  const type = () => {
+    if (i < text.length) {
+      caption.textContent += text[i++];
+      setTimeout(type, 55 + Math.random() * 40);
+    } else {
+      setTimeout(() => { caption.style.borderRight = 'none'; }, 1800);
+    }
+  };
+  setTimeout(type, 600);
+}
+
+function initMagneticButtons() {
+  document.querySelectorAll('.btn-primary:not(.runaway)').forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) * 0.35;
+      const dy = (e.clientY - cy) * 0.35;
+      btn.style.transform = `translate(${dx}px, ${dy}px)`;
+      btn.style.transition = 'transform 0.15s ease';
+    });
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = 'translate(0, 0)';
+      btn.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    });
+  });
+}
+
+function initPromiseReveal() {
+  const items = document.querySelectorAll('.promise-item');
+  if (!items.length) return;
+
+  items.forEach((item, i) => {
+    item.style.opacity = '0';
+    item.style.transform = 'translateY(16px)';
+    item.style.transition = `opacity 0.4s ease ${i * 0.04}s, transform 0.4s ease ${i * 0.04}s`;
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
+
+  items.forEach(item => observer.observe(item));
+}
+
+function initCardShimmer() {
+  document.querySelectorAll('.card').forEach(card => {
+    if (card.querySelector('.card-shimmer')) return;
+    card.style.overflow = 'hidden';
+    Array.from(card.children).forEach(child => {
+      if (!child.classList.contains('card-shimmer')) child.style.position = child.style.position || 'relative';
+      if (!child.classList.contains('card-shimmer')) child.style.zIndex = child.style.zIndex || '1';
+    });
+    const shimmer = document.createElement('div');
+    shimmer.className = 'card-shimmer';
+    shimmer.style.cssText = `
+      position:absolute; inset:0; pointer-events:none; z-index:0;
+      background: linear-gradient(105deg, transparent 40%, rgba(168,216,234,0.07) 50%, transparent 60%);
+      background-size: 200% 100%;
+      animation: borderShimmer 5s linear infinite;
+    `;
+    card.appendChild(shimmer);
+  });
+}
+
+function initEnvelopeGlow() {
+  const container = document.getElementById('canvas-container-voxel');
+  if (!container || container.querySelector('.envelope-glow')) return;
+
+  const glow = document.createElement('div');
+  glow.className = 'envelope-glow';
+  glow.style.cssText = `
+    position: absolute;
+    bottom: 30%; left: 50%;
+    transform: translateX(-50%);
+    width: 200px; height: 60px;
+    background: radial-gradient(ellipse, rgba(212,104,138,0.4) 0%, transparent 70%);
+    animation: glowPulse 2s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 4;
+    filter: blur(12px);
+  `;
+  container.appendChild(glow);
+}
+
 // --- Consolidated DOMContentLoaded Event ---
 window.addEventListener('DOMContentLoaded', () => {
   // Initialize CRT/Y2K effects
@@ -402,6 +655,18 @@ window.addEventListener('DOMContentLoaded', () => {
       if(typeof createHeartBurst === 'function') createHeartBurst(x, y);
     }, { passive: true });
   });
+
+  // New thematic animation layer
+  initGhostCursor();
+  initTitleGlitch();
+  initPageTransition();
+  initMagneticButtons();
+  initCardShimmer();
+  initStarBorder('yesBtn3');
+  initPromiseParticles();
+  initPromiseReveal();
+  initTypewriter();
+  initEnvelopeGlow();
 });
 
 // --- Three.js Voxel Envelope Engine (Step 5) ---
@@ -479,9 +744,9 @@ function createVoxelEnvelope() {
   voxelScene.add(envelopeGroup);
 
   const voxelSize = 1;
-  const whiteMat = new THREE.MeshStandardMaterial({ color: 0xF5F5F5, roughness: 0.8 }); // Off-white
-  const heartMat = new THREE.MeshStandardMaterial({ color: 0xD64065, roughness: 0.5 }); // Deep Rose
-  const borderMat = new THREE.LineBasicMaterial({ color: 0x87CEEB, linewidth: 2 }); // Ice Blue
+  const whiteMat = new THREE.MeshStandardMaterial({ color: 0x080F1A, roughness: 0.8 });
+  const heartMat = new THREE.MeshStandardMaterial({ color: 0xD4688A, roughness: 0.5 });
+  const borderMat = new THREE.LineBasicMaterial({ color: 0xA8D8EA, linewidth: 2 });
 
   function addCube(x, y, z, mat, parent) {
     parent = parent || envelopeGroup;
@@ -669,4 +934,3 @@ window.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
   });
 });
-
