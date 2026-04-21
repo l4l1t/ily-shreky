@@ -1,29 +1,49 @@
-.container {
-    background: linear-gradient(135deg, var(--midnight-blue), var(--obsidian-black));
-    border: 5px double var(--metallic-silver);
+.root {
+  --obsidian-black: #050505;
+  --midnight-blue: #001233;
+  --metallic-silver: #C0C0C0;
+  --ice-blue: #99CCFF;
+  --blood-red: #4A0000;
+  --lily-pink: #FADADD;
 }
 
-button {
-    background-color: var(--metallic-silver);
-    color: var(--ice-blue);
-    transition: background-color 0.3s ease;
+body {
+  background-color: var(--obsidian-black);
+  color: var(--metallic-silver);
+  font-family: 'Gothic', sans-serif;
+  animation: rain 3s linear infinite;
 }
 
-button:hover {
-    background-color: var(--blood-red);
+.card {
+  border: 2px double var(--metallic-silver);
+  padding: 20px;
+  background-color: var(--midnight-blue);
+  box-shadow: 0 4px 8px var(--blood-red);
+  transition: background-color 0.3s;
 }
 
-.particle {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background-color: var(--lily-pink);
-    border-radius: 50%;
-    animation: float 3s infinite;
+.card:hover {
+  background-color: var(--ice-blue);
 }
 
-@keyframes float {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-    100% { transform: translateY(0); }
+.button {
+  background-color: var(--lily-pink);
+  border: none;
+  padding: 10px 20px;
+  color: var(--obsidian-black);
+  cursor: pointer;
+  box-shadow: 0 2px 4px var(--metallic-silver);
+  text-shadow: 1px 1px var(--blood-red);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px var(--blood-red);
+}
+
+@keyframes rain {
+  0% { background-color: var(--lily-pink); }
+  50% { background-color: var(--ice-blue); }
+  100% { background-color: var(--lily-pink); }
 }
