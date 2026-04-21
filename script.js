@@ -55,10 +55,10 @@ function runHeartLogic(containerId) {
   const voxelSize = 1;
   const geometry = new THREE.BoxGeometry(voxelSize, voxelSize, voxelSize);
   const materials = [
-    new THREE.MeshStandardMaterial({ color: COLORS.deepRose, roughness: 0.3 }),
-    new THREE.MeshStandardMaterial({ color: COLORS.softMauve, roughness: 0.3 }),
-    new THREE.MeshStandardMaterial({ color: COLORS.lavender, roughness: 0.2 }),
-    new THREE.MeshStandardMaterial({ color: COLORS.iceBlue, roughness: 0.2 }),
+    new THREE.MeshStandardMaterial({ color: 0xFF0000, roughness: 0.3 }),
+    new THREE.MeshStandardMaterial({ color: 0xCC0000, roughness: 0.3 }),
+    new THREE.MeshStandardMaterial({ color: 0xEE1111, roughness: 0.2 }),
+    new THREE.MeshStandardMaterial({ color: 0xFF3333, roughness: 0.2 }),
   ];
   const edgesGeometry = new THREE.EdgesGeometry(geometry);
   const edgesMaterial = new THREE.LineBasicMaterial({ color: 0xFFFFFF, linewidth: 2 }); // Intentional white contrast
@@ -420,7 +420,7 @@ function initStarBorder(btnId) {
       pointer-events: none;
       left: ${Math.random() * 100}%;
       top: ${Math.random() * 100}%;
-      animation: star-fade 0.8s ease-out forwards;
+      animation: starFade 0.8s ease-out forwards;
       box-shadow: 0 0 ${size * 2}px rgba(168,216,234,0.8);
     `;
     btn.appendChild(star);
@@ -480,7 +480,7 @@ function initPromiseParticles() {
       background:rgba(168,216,234,${Math.random() * 0.4 + 0.1});
       left:${Math.random() * 100}%;
       bottom:${Math.random() * 100}%;
-      animation: drift-up ${12 + Math.random() * 16}s linear infinite;
+      animation: driftUp ${12 + Math.random() * 16}s linear infinite;
       animation-delay: -${Math.random() * 20}s;
       box-shadow: 0 0 ${size * 3}px rgba(168,216,234,0.3);
     `;
@@ -582,7 +582,7 @@ function initCardShimmer() {
       position:absolute; inset:0; pointer-events:none; z-index:0;
       background: linear-gradient(105deg, transparent 40%, rgba(168,216,234,0.07) 50%, transparent 60%);
       background-size: 200% 100%;
-      animation: border-shimmer 5s linear infinite;
+      animation: borderShimmer 5s linear infinite;
     `;
     card.appendChild(shimmer);
   });
@@ -599,8 +599,8 @@ function initEnvelopeGlow() {
     bottom: 30%; left: 50%;
     transform: translateX(-50%);
     width: 200px; height: 60px;
-    background: radial-gradient(ellipse, rgba(212,104,138,0.4) 0%, transparent 70%);
-    animation: glow-pulse 2s ease-in-out infinite;
+    background: radial-gradient(ellipse, rgba(233,30,140,0.45) 0%, transparent 70%);
+    animation: glowPulse 2s ease-in-out infinite;
     pointer-events: none;
     z-index: 4;
     filter: blur(12px);
@@ -673,7 +673,6 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   // New thematic animation layer
-  initGhostCursor();
   initTitleGlitch();
   initPageTransition();
   initMagneticButtons();
