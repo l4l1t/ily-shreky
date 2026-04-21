@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>💌</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="hearts" id="hearts"></div>
+  
+  <section class="screen active" style="display:flex;" id="step-promises">
+    <div class="card">
+      <div class="gif-container" id="promises-heart-container" style="position: relative;"></div>
+
+      <h1 class="title">I PROMISE...🥀</h1>
+
+      <div class="checklist-container">
+        <div class="promise-item" onclick="togglePromiseLocal(this)">
+          <div class="checkbox-circle"></div>
+          <div class="promise-text">I'll never cheat on you 💍</div>
+        </div>
+        <div class="promise-item" onclick="togglePromiseLocal(this)">
+          <div class="checkbox-circle"></div>
+          <div class="promise-text">I promise to make myself better for you ✨</div>
+        </div>
+        <div class="promise-item" onclick="togglePromiseLocal(this)">
+          <div class="checkbox-circle"></div>
+          <div class="promise-text">I'll comfort you whenever you feel sad 🧸</div>
+        </div>
+        <div class="promise-item" onclick="togglePromiseLocal(this)">
+          <div class="checkbox-circle"></div>
+          <div class="promise-text">I'll correct myself if I'm wrong 💌</div>
+        </div>
+        <div class="promise-item" onclick="togglePromiseLocal(this)">
+          <div class="checkbox-circle"></div>
+          <div class="promise-text">I'll never be toxic to you 🌸</div>
+        </div>
+        <div class="promise-item" onclick="togglePromiseLocal(this)">
+          <div class="checkbox-circle"></div>
+          <div class="promise-text">I'll never change for anybody 🌟</div>
+        </div>
+        <div class="promise-item" onclick="togglePromiseLocal(this)">
+          <div class="checkbox-circle"></div>
+          <div class="promise-text">I'll take care of you 🫶🏻</div>
+        </div>
+        <div class="promise-item" onclick="togglePromiseLocal(this)">
+          <div class="checkbox-circle"></div>
+          <div class="promise-text">I'll always be honest with you 🤞</div>
+        </div>
+        <div class="promise-item" onclick="togglePromiseLocal(this)">
+          <div class="checkbox-circle"></div>
+          <div class="promise-text">I'll never make you feel alone 🤗</div>
+        </div>
+        <div class="promise-item" onclick="togglePromiseLocal(this)">
+          <div class="checkbox-circle"></div>
+          <div class="promise-text">I'll always listen to you no matter what 👂🏻</div>
+        </div>
+        <div class="promise-item" onclick="togglePromiseLocal(this)">
+          <div class="checkbox-circle"></div>
+          <div class="promise-text">I'll never go to sleep without texting you goodnight 🌙</div>
+        </div>
+        <div class="promise-item" onclick="togglePromiseLocal(this)">
+          <div class="checkbox-circle"></div>
+          <div class="promise-text">I'll always put you first 👑</div>
+        </div>
+        <div class="promise-item" onclick="togglePromiseLocal(this)">
+          <div class="checkbox-circle"></div>
+          <div class="promise-text">I'll never let anyone talk bad about you 🛡️</div>
+        </div>
+        <div class="promise-item" onclick="togglePromiseLocal(this)">
+          <div class="checkbox-circle"></div>
+          <div class="promise-text">I'll make every moment with you special 🦋</div>
+        </div>
+        <div class="promise-item" onclick="togglePromiseLocal(this)">
+          <div class="checkbox-circle"></div>
+          <div class="promise-text">I'll love you more and more every single day 🥀</div>
+        </div>
+      </div>
+
+      <div class="btn-row" style="position: relative; z-index: 10;">
+        <button class="btn btn-primary" id="promisesNextBtn" onclick="goToStep4Local()" disabled style="opacity:0.5; cursor:not-allowed;">
+          I AGREE !!! 💌
+        </button>
+      </div>
+
+      <div class="btn-row" style="margin-top:24px;">
+        <a href="step3.html" class="btn btn-secondary" style="text-decoration:none; display:inline-block;">← Back</a>
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+  <script>
+    function togglePromiseLocal(element) {
+      element.classList.toggle('checked');
+      const checkbox = element.querySelector('.checkbox-circle');
+      if (element.classList.contains('checked')) {
+        checkbox.innerHTML = 'X';
+        gsap.fromTo(element, { scale: 1 }, { scale: 1.02, duration: 0.1, yoyo: true, repeat: 1 });
+        const rect = element.getBoundingClientRect();
+        if(typeof createHeartBurst === 'function') createHeartBurst(rect.left + 20, rect.top + 20);
+      } else {
+        checkbox.innerHTML = '';
+      }
+      checkAllPromisesLocal();
+    }
+
+    function checkAllPromisesLocal() {
+      const items = document.querySelectorAll('#step-promises .promise-item');
+      let allChecked = true;
+      items.forEach(item => {
+        if (!item.classList.contains('checked')) {
+          allChecked = false;
+        }
+      });
+
+      const nextBtn = document.getElementById('promisesNextBtn');
+      if (allChecked) {
+        if (nextBtn.disabled) {
+          nextBtn.disabled = false;
+          nextBtn.style.opacity = '1';
+          nextBtn.style.cursor = 'pointer';
+          const rect = nextBtn.getBoundingClientRect();
+          if(typeof createHeartBurst === 'function') createHeartBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
+          gsap.to(nextBtn, { scale: 1.05, duration: 1, repeat: -1, yoyo: true, ease: "steps(2)" });
+        }
+      } else {
+        nextBtn.disabled = true;
+        nextBtn.style.opacity = '0.5';
+        nextBtn.style.cursor = 'not-allowed';
+        gsap.killTweensOf(nextBtn);
+        gsap.to(nextBtn, { scale: 1, duration: 0.1 });
+      }
+    }
+
+    function goToStep4Local() {
+      const nextBtn = document.getElementById('promisesNextBtn');
+      const rect = nextBtn.getBoundingClientRect();
+      if(typeof createMegaHeartBurst === 'function') createMegaHeartBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      setTimeout(() => {
+        window.location.href = 'step4.html';
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

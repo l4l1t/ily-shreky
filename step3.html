@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>💌</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="hearts" id="hearts"></div>
+  
+  <section class="screen active" style="display:flex;" id="step3-valentine">
+    <div class="card">
+      <div class="gif-container" id="minecraft-heart-container" style="position: relative;"></div>
+
+      <h1 class="title">WILL YOU BE MY GIRLFRIEND???😻💌 </h1>
+
+      <div class="btn-row compact-row" style="justify-content: center; min-height: 100px;">
+        <button class="btn btn-secondary runaway" id="noBtn3">No</button>
+        <button class="btn btn-primary" id="yesBtn3" onclick="goToPromisesLocally()">Yes</button>
+      </div>
+
+      <div class="btn-row" style="margin-top:24px;">
+        <a href="step2.html" class="btn btn-secondary" style="text-decoration:none; display:inline-block;">← Back</a>
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+  <script>
+    function goToPromisesLocally() {
+      const yesBtn = document.getElementById('yesBtn3');
+      yesBtn.style.backgroundColor = '#FB2943';
+      yesBtn.style.transform = 'scale(1.1)';
+      const rect = yesBtn.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      
+      if(typeof createMegaHeartBurst === 'function') createMegaHeartBurst(x, y);
+      
+      setTimeout(() => {
+        window.location.href = 'step-promises.html';
+      }, 1500);
+    }
+    
+    window.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('noBtn3');
+        if(!btn) return;
+        const moveAway = (ev) => {
+            const card = document.querySelector('.card');
+            const cardRect = card.getBoundingClientRect();
+            
+            const maxLeft = cardRect.width - btn.offsetWidth - 20;
+            const maxTop = cardRect.height - btn.offsetHeight - 20;
+            
+            const nx = Math.floor(Math.random() * maxLeft);
+            const ny = Math.floor(Math.random() * maxTop);
+            
+            btn.style.transition = 'transform 0.2s step-start';
+            btn.style.transform = `translate(${nx - (btn.offsetLeft)}px, ${ny - (btn.offsetTop)}px)`;
+        };
+        btn.addEventListener('mouseover', moveAway, { passive: true });
+        btn.addEventListener('touchstart', (ev) => {
+            ev.preventDefault();
+            moveAway(ev);
+        }, { passive: false });
+    });
+  </script>
+</body>
+</html>

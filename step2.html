@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>💌</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="hearts" id="hearts"></div>
+  
+  <section class="screen active" style="display:flex;" id="step2">
+    <div class="card">
+      <h1 class="title">Are you in love with me?</h1>
+      
+      <div class="btn-row compact-row">
+        <button class="btn btn-secondary" onclick="document.getElementById('noPanel').style.display='block'; document.getElementById('yesPanel').style.display='none';">No</button>
+        <button class="btn btn-primary" onclick="document.getElementById('yesPanel').style.display='block'; document.getElementById('noPanel').style.display='none';">Yes</button>
+      </div>
+      
+      <div id="noPanel" style="margin-top:24px; display:none;">
+        <p class="caption">Cupcakee please 🥀 Ily so much 🙁</p>
+      </div>
+
+      <div id="yesPanel" style="margin-top:24px; display:none;">
+        <div class="btn-row">
+          <a href="step3.html" class="btn btn-primary" style="text-decoration:none; display:inline-block;">One last time... 💌</a>
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top:24px;">
+        <a href="index.html" class="btn btn-secondary" style="text-decoration:none; display:inline-block;">← Back</a>
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>

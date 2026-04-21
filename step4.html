@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>💌</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="hearts" id="hearts"></div>
+  
+  <section class="screen active" style="display:flex;" id="step4-transition">
+    <div class="card">
+      <div class="step4-container">
+        <div class="timer-section">
+          <div class="timer-wrapper">
+            <p class="caption-timer">Days since we met 💌</p>
+            <div class="timer-container">
+              <div class="time-unit">
+                <span class="time-value" id="days">00</span>
+                <span class="time-label">Days</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <a href="step5.html" class="btn btn-primary" style="text-decoration:none; display:inline-block; text-align:center;">OPEN THE LETTER 🥀</a>
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top:24px;">
+        <a href="step-promises.html" class="btn btn-secondary" style="text-decoration:none; display:inline-block;">← Back</a>
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if(typeof startTimer === 'function') startTimer();
+    });
+  </script>
+</body>
+</html>
