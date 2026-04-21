@@ -61,7 +61,7 @@ function runHeartLogic(containerId) {
     new THREE.MeshStandardMaterial({ color: 0x1A3A5C, roughness: 0.5 }),
   ];
   const edgesGeometry = new THREE.EdgesGeometry(geometry);
-  const edgesMaterial = new THREE.LineBasicMaterial({ color: 0xFFFFFF, linewidth: 2 }); // White edges
+  const edgesMaterial = new THREE.LineBasicMaterial({ color: 0xFFFFFF, linewidth: 2 }); // Intentional white contrast
 
   const offsetX = (heartShape[0].length * voxelSize) / 2;
   const offsetY = (heartShape.length * voxelSize) / 2;
@@ -117,14 +117,6 @@ function runHeartLogic(containerId) {
   });
   resizeObserver.observe(container);
 }
-
-// Auto-init hearts on page load
-window.addEventListener('DOMContentLoaded', () => {
-  if (typeof THREE !== 'undefined') {
-    runHeartLogic('minecraft-heart-container');
-    runHeartLogic('promises-heart-container');
-  }
-});
 
 // --- Device detection ---
 const isLowEndDevice = navigator.deviceMemory && navigator.deviceMemory <= 2;
@@ -405,6 +397,7 @@ function initTitleGlitch() {
 
 function initStarBorder(btnId) {
   const btn = document.getElementById(btnId);
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   if (!btn) return;
   btn.style.position = 'relative';
   btn.style.overflow = 'hidden';
@@ -599,6 +592,11 @@ function initEnvelopeGlow() {
 
 // --- Consolidated DOMContentLoaded Event ---
 window.addEventListener('DOMContentLoaded', () => {
+  if (typeof THREE !== 'undefined') {
+    runHeartLogic('minecraft-heart-container');
+    runHeartLogic('promises-heart-container');
+  }
+
   // Initialize CRT/Y2K effects
   createGlitchEffect();
   addScreenFlicker();
