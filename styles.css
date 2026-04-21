@@ -9,18 +9,18 @@
 :root {
   --mc-red: #E91E8C;
   --mc-dark-red: #C2185B;
-  --mc-pink: #A8D8EA;
-  --mc-light-pink: #F48FB1;
+  --mc-pink: #F48FB1;
+  --mc-light-pink: #F8BBD9;
   --mc-white: #FFF8F0;
-  --mc-green: #AD1457;
-  --mc-dark-green: #880E4F;
-  --mc-grass-green: #D81B60;
+  --mc-green: #4CAF50;
+  --mc-dark-green: #2E7D32;
+  --mc-grass-green: #66BB6A;
   --mc-stone: #FCE4EC;
   --mc-dark-stone: #F8BBD9;
   --mc-dirt: #A8D8EA;
   --mc-dark: #5D4037;
-  --mc-obsidian: #FFF0F5;
-  --mc-gold: #B8C4CC;
+  --mc-obsidian: #2D1B2E;
+  --mc-gold: #D4AF37;
 
   --soft-bg: #FFF0F8;
   --text-main: #4A148C;
@@ -993,10 +993,6 @@ body::after {
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
   box-shadow: var(--mc-shadow-lg), var(--mc-inset-shadow);
-}
-
-.modal-content {
-  background: #FFF0F5;
 }
 
 /* ---- RUNAWAY BUTTON ---- */

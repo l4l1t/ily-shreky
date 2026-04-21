@@ -55,13 +55,13 @@ function runHeartLogic(containerId) {
   const voxelSize = 1;
   const geometry = new THREE.BoxGeometry(voxelSize, voxelSize, voxelSize);
   const materials = [
-    new THREE.MeshStandardMaterial({ color: 0xFF0000, roughness: 0.3 }),
-    new THREE.MeshStandardMaterial({ color: 0xCC0000, roughness: 0.3 }),
-    new THREE.MeshStandardMaterial({ color: 0xEE1111, roughness: 0.2 }),
-    new THREE.MeshStandardMaterial({ color: 0xFF3333, roughness: 0.2 }),
+    new THREE.MeshStandardMaterial({ color: COLORS.deepRose, roughness: 0.3 }),
+    new THREE.MeshStandardMaterial({ color: COLORS.softMauve, roughness: 0.3 }),
+    new THREE.MeshStandardMaterial({ color: COLORS.lavender, roughness: 0.2 }),
+    new THREE.MeshStandardMaterial({ color: COLORS.iceBlue, roughness: 0.2 }),
   ];
   const edgesGeometry = new THREE.EdgesGeometry(geometry);
-  const edgesMaterial = new THREE.LineBasicMaterial({ color: 0xFFFFFF, linewidth: 2 }); // White edges
+  const edgesMaterial = new THREE.LineBasicMaterial({ color: 0xFFFFFF, linewidth: 2 }); // Intentional white contrast
 
   const offsetX = (heartShape[0].length * voxelSize) / 2;
   const offsetY = (heartShape.length * voxelSize) / 2;
@@ -384,32 +384,40 @@ function initGhostCursor() {
 }
 
 function initTitleGlitch() {
-  const title = document.querySelector('.title');
-  if (!title) return;
-  const original = title.textContent;
+  const titles = document.querySelectorAll('.title');
+  if (!titles.length) return;
   const chars = '█▓▒░▀▄▌▐';
-  let frame = 0;
+  titles.forEach(title => {
+    const originalInnerHTML = title.innerHTML;
+    const originalText = title.textContent;
+    let frame = 0;
 
-  const glitch = setInterval(() => {
-    if (frame > 12) {
-      title.textContent = original;
-      clearInterval(glitch);
-      return;
-    }
-    title.textContent = original.split('').map((c) =>
-      Math.random() < 0.15 ? chars[Math.floor(Math.random() * chars.length)] : c
-    ).join('');
-    frame++;
-  }, 80);
+    const glitch = setInterval(() => {
+      if (frame > 12) {
+        title.innerHTML = originalInnerHTML;
+        clearInterval(glitch);
+        return;
+      }
+      title.textContent = originalText.split('').map((c) =>
+        Math.random() < 0.15 ? chars[Math.floor(Math.random() * chars.length)] : c
+      ).join('');
+      frame++;
+    }, 80);
+  });
 }
 
 function initStarBorder(btnId) {
   const btn = document.getElementById(btnId);
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   if (!btn) return;
   btn.style.position = 'relative';
   btn.style.overflow = 'hidden';
 
-  setInterval(() => {
+  const intervalId = setInterval(() => {
+    if (!btn.isConnected) {
+      clearInterval(intervalId);
+      return;
+    }
     const star = document.createElement('div');
     const size = Math.random() * 4 + 2;
     star.style.cssText = `
@@ -506,7 +514,9 @@ function initHeartbeatTimer() {
 function initTypewriter() {
   const caption = document.querySelector('.caption');
   if (!caption || caption.dataset.typed === 'true') return;
+  if (caption.children.length) return;
   const text = caption.textContent;
+  const chars = Array.from(text);
   caption.textContent = '';
   caption.style.borderRight = '2px solid #A8D8EA';
   caption.style.whiteSpace = 'pre-wrap';
@@ -514,8 +524,8 @@ function initTypewriter() {
 
   let i = 0;
   const type = () => {
-    if (i < text.length) {
-      caption.textContent += text[i++];
+    if (i < chars.length) {
+      caption.textContent += chars[i++];
       setTimeout(type, 55 + Math.random() * 40);
     } else {
       setTimeout(() => { caption.style.borderRight = 'none'; }, 1800);
@@ -905,41 +915,3 @@ function closeVoxelLetter() {
   });
   gsap.to(envelopeGroup.position, { y: 0, duration: 1 });
 }
-
-// --- Particles & Button Enhancements ---
-window.addEventListener('DOMContentLoaded', () => {
-  const particlesContainer = document.getElementById('particlesLayer');
-  if (particlesContainer && !isLowEndDevice) {
-    const colors = ['#FB2943', '#FF6B9D', '#FFFFFF', '#55AA55']; // Red, Pink, White, Green
-    const pc = isLowEndDevice ? 15 : 30;
-    for (let i = 0; i < pc; i++) {
-      const el = document.createElement('div');
-      el.className = 'particle performance-optimized';
-      el.style.left = Math.random() * 100 + '%';
-      el.style.top = Math.random() * 100 + '%';
-      el.style.background = colors[Math.floor(Math.random() * colors.length)];
-      el.style.animationDuration = 10 + Math.random() * 18 + 's';
-      el.style.opacity = (0.5 + Math.random() * 0.4).toString();
-      el.style.transform = `translateY(${Math.random() * 30}vh)`;
-      el.style.borderRadius = '0'; // Square pixels
-      particlesContainer.appendChild(el);
-    }
-  }
-
-  // Add heart burst to all buttons
-  const allButtons = Array.from(document.querySelectorAll('button, .btn'));
-  allButtons.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      let x, y;
-      if (e.clientX && e.clientY) {
-        x = e.clientX;
-        y = e.clientY;
-      } else {
-        const rect = btn.getBoundingClientRect();
-        x = rect.left + rect.width / 2;
-        y = rect.top + rect.height / 2;
-      }
-      if(typeof createHeartBurst === 'function') createHeartBurst(x, y);
-    }, { passive: true });
-  });
-});
