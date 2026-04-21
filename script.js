@@ -55,10 +55,10 @@ function runHeartLogic(containerId) {
   const voxelSize = 1;
   const geometry = new THREE.BoxGeometry(voxelSize, voxelSize, voxelSize);
   const materials = [
-    new THREE.MeshStandardMaterial({ color: 0xFF0000, roughness: 0.3 }),
-    new THREE.MeshStandardMaterial({ color: 0xCC0000, roughness: 0.3 }),
-    new THREE.MeshStandardMaterial({ color: 0xEE1111, roughness: 0.2 }),
-    new THREE.MeshStandardMaterial({ color: 0xFF3333, roughness: 0.2 }),
+    new THREE.MeshStandardMaterial({ color: 0xD4688A, roughness: 0.3 }),
+    new THREE.MeshStandardMaterial({ color: 0xB84F70, roughness: 0.4 }),
+    new THREE.MeshStandardMaterial({ color: 0xA8D8EA, roughness: 0.35 }),
+    new THREE.MeshStandardMaterial({ color: 0x1A3A5C, roughness: 0.5 }),
   ];
   const edgesGeometry = new THREE.EdgesGeometry(geometry);
   const edgesMaterial = new THREE.LineBasicMaterial({ color: 0xFFFFFF, linewidth: 2 }); // Intentional white contrast
@@ -376,26 +376,23 @@ function initGhostCursor() {
 }
 
 function initTitleGlitch() {
-  const titles = document.querySelectorAll('.title');
-  if (!titles.length) return;
+  const title = document.querySelector('.title');
+  if (!title) return;
+  const original = title.textContent;
   const chars = '█▓▒░▀▄▌▐';
-  titles.forEach(title => {
-    const originalInnerHTML = title.innerHTML;
-    const originalText = title.textContent;
-    let frame = 0;
+  let frame = 0;
 
-    const glitch = setInterval(() => {
-      if (frame > 12) {
-        title.innerHTML = originalInnerHTML;
-        clearInterval(glitch);
-        return;
-      }
-      title.textContent = originalText.split('').map((c) =>
-        Math.random() < 0.15 ? chars[Math.floor(Math.random() * chars.length)] : c
-      ).join('');
-      frame++;
-    }, 80);
-  });
+  const glitch = setInterval(() => {
+    if (frame > 12) {
+      title.textContent = original;
+      clearInterval(glitch);
+      return;
+    }
+    title.textContent = original.split('').map((c) =>
+      Math.random() < 0.15 ? chars[Math.floor(Math.random() * chars.length)] : c
+    ).join('');
+    frame++;
+  }, 80);
 }
 
 function initStarBorder(btnId) {
@@ -405,11 +402,7 @@ function initStarBorder(btnId) {
   btn.style.position = 'relative';
   btn.style.overflow = 'hidden';
 
-  const intervalId = setInterval(() => {
-    if (!btn.isConnected) {
-      clearInterval(intervalId);
-      return;
-    }
+  setInterval(() => {
     const star = document.createElement('div');
     const size = Math.random() * 4 + 2;
     star.style.cssText = `
@@ -435,27 +428,19 @@ function initPageTransition() {
     position: fixed; inset: 0; z-index: 999999;
     background: #04060F;
     pointer-events: none;
-    opacity: 1;
+    opacity: 0;
     transition: opacity 0.3s ease;
   `;
   document.body.appendChild(overlay);
 
   window.addEventListener('load', () => {
-    overlay.style.opacity = '0';
+    overlay.style.opacity = '1';
+    setTimeout(() => { overlay.style.opacity = '0'; }, 50);
   });
 
   document.querySelectorAll('a.btn').forEach(link => {
     link.addEventListener('click', (e) => {
       const href = link.getAttribute('href');
-      if (
-        e.defaultPrevented ||
-        e.button !== 0 ||
-        e.metaKey ||
-        e.ctrlKey ||
-        e.shiftKey ||
-        link.target === '_blank' ||
-        link.hasAttribute('download')
-      ) return;
       if (!href || href.startsWith('#')) return;
       e.preventDefault();
       overlay.style.opacity = '1';
@@ -506,9 +491,7 @@ function initHeartbeatTimer() {
 function initTypewriter() {
   const caption = document.querySelector('.caption');
   if (!caption || caption.dataset.typed === 'true') return;
-  if (caption.children.length) return;
   const text = caption.textContent;
-  const chars = Array.from(text);
   caption.textContent = '';
   caption.style.borderRight = '2px solid #A8D8EA';
   caption.style.whiteSpace = 'pre-wrap';
@@ -516,8 +499,8 @@ function initTypewriter() {
 
   let i = 0;
   const type = () => {
-    if (i < chars.length) {
-      caption.textContent += chars[i++];
+    if (i < text.length) {
+      caption.textContent += text[i++];
       setTimeout(type, 55 + Math.random() * 40);
     } else {
       setTimeout(() => { caption.style.borderRight = 'none'; }, 1800);
@@ -527,7 +510,7 @@ function initTypewriter() {
 }
 
 function initMagneticButtons() {
-  document.querySelectorAll('.btn-primary:not(.runaway):not(#promisesNextBtn):not(.no-magnetic)').forEach(btn => {
+  document.querySelectorAll('.btn-primary:not(.runaway)').forEach(btn => {
     btn.addEventListener('mousemove', (e) => {
       const rect = btn.getBoundingClientRect();
       const cx = rect.left + rect.width / 2;
@@ -572,7 +555,6 @@ function initCardShimmer() {
     if (card.querySelector('.card-shimmer')) return;
     card.style.overflow = 'hidden';
     Array.from(card.children).forEach(child => {
-      if (child.matches('.btn-row') || child.querySelector('.runaway')) return;
       if (!child.classList.contains('card-shimmer')) child.style.position = child.style.position || 'relative';
       if (!child.classList.contains('card-shimmer')) child.style.zIndex = child.style.zIndex || '1';
     });
@@ -599,7 +581,7 @@ function initEnvelopeGlow() {
     bottom: 30%; left: 50%;
     transform: translateX(-50%);
     width: 200px; height: 60px;
-    background: radial-gradient(ellipse, rgba(233,30,140,0.45) 0%, transparent 70%);
+    background: radial-gradient(ellipse, rgba(212,104,138,0.4) 0%, transparent 70%);
     animation: glowPulse 2s ease-in-out infinite;
     pointer-events: none;
     z-index: 4;
@@ -673,6 +655,7 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   // New thematic animation layer
+  initGhostCursor();
   initTitleGlitch();
   initPageTransition();
   initMagneticButtons();
@@ -759,9 +742,9 @@ function createVoxelEnvelope() {
   voxelScene.add(envelopeGroup);
 
   const voxelSize = 1;
-  const whiteMat = new THREE.MeshStandardMaterial({ color: 0xFFF8F0, roughness: 0.9 });
+  const whiteMat = new THREE.MeshStandardMaterial({ color: 0x080F1A, roughness: 0.8 });
   const heartMat = new THREE.MeshStandardMaterial({ color: 0xD4688A, roughness: 0.5 });
-  const borderMat = new THREE.LineBasicMaterial({ color: 0xD4688A, linewidth: 2 });
+  const borderMat = new THREE.LineBasicMaterial({ color: 0xA8D8EA, linewidth: 2 });
 
   function addCube(x, y, z, mat, parent) {
     parent = parent || envelopeGroup;
@@ -911,3 +894,41 @@ function closeVoxelLetter() {
   });
   gsap.to(envelopeGroup.position, { y: 0, duration: 1 });
 }
+
+// --- Particles & Button Enhancements ---
+window.addEventListener('DOMContentLoaded', () => {
+  const particlesContainer = document.getElementById('particlesLayer');
+  if (particlesContainer && !isLowEndDevice) {
+    const colors = ['#FB2943', '#FF6B9D', '#FFFFFF', '#55AA55']; // Red, Pink, White, Green
+    const pc = isLowEndDevice ? 15 : 30;
+    for (let i = 0; i < pc; i++) {
+      const el = document.createElement('div');
+      el.className = 'particle performance-optimized';
+      el.style.left = Math.random() * 100 + '%';
+      el.style.top = Math.random() * 100 + '%';
+      el.style.background = colors[Math.floor(Math.random() * colors.length)];
+      el.style.animationDuration = 10 + Math.random() * 18 + 's';
+      el.style.opacity = (0.5 + Math.random() * 0.4).toString();
+      el.style.transform = `translateY(${Math.random() * 30}vh)`;
+      el.style.borderRadius = '0'; // Square pixels
+      particlesContainer.appendChild(el);
+    }
+  }
+
+  // Add heart burst to all buttons
+  const allButtons = Array.from(document.querySelectorAll('button, .btn'));
+  allButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      let x, y;
+      if (e.clientX && e.clientY) {
+        x = e.clientX;
+        y = e.clientY;
+      } else {
+        const rect = btn.getBoundingClientRect();
+        x = rect.left + rect.width / 2;
+        y = rect.top + rect.height / 2;
+      }
+      if(typeof createHeartBurst === 'function') createHeartBurst(x, y);
+    }, { passive: true });
+  });
+});
