@@ -118,14 +118,6 @@ function runHeartLogic(containerId) {
   resizeObserver.observe(container);
 }
 
-// Auto-init hearts on page load
-window.addEventListener('DOMContentLoaded', () => {
-  if (typeof THREE !== 'undefined') {
-    runHeartLogic('minecraft-heart-container');
-    runHeartLogic('promises-heart-container');
-  }
-});
-
 // --- Device detection ---
 const isLowEndDevice = navigator.deviceMemory && navigator.deviceMemory <= 2;
 const particleCount = isLowEndDevice ? 20 : 40;
@@ -618,6 +610,11 @@ function initEnvelopeGlow() {
 
 // --- Consolidated DOMContentLoaded Event ---
 window.addEventListener('DOMContentLoaded', () => {
+  if (typeof THREE !== 'undefined') {
+    runHeartLogic('minecraft-heart-container');
+    runHeartLogic('promises-heart-container');
+  }
+
   // Initialize CRT/Y2K effects
   createGlitchEffect();
   addScreenFlicker();

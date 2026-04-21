@@ -282,6 +282,8 @@ body::after {
   background: #9e9e9e;
   transform: translateY(-2px);
   box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.4), var(--mc-outset-shadow);
+  animation: vhsWave 0.1s ease-in-out;
+  filter: saturate(1.2);
 }
 
 .btn:active {
@@ -1207,11 +1209,6 @@ body::after {
 @keyframes vhsWave {
   0%, 100% { transform: skewY(-0.5deg); }
   50% { transform: skewY(0.5deg); }
-}
-
-.btn:hover {
-  animation: vhsWave 0.1s ease-in-out;
-  filter: saturate(1.2);
 }
 
 /* CRT scanline overlay */
