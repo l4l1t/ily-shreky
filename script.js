@@ -420,7 +420,7 @@ function initStarBorder(btnId) {
       pointer-events: none;
       left: ${Math.random() * 100}%;
       top: ${Math.random() * 100}%;
-      animation: starFade 0.8s ease-out forwards;
+      animation: star-fade 0.8s ease-out forwards;
       box-shadow: 0 0 ${size * 2}px rgba(168,216,234,0.8);
     `;
     btn.appendChild(star);
@@ -435,19 +435,27 @@ function initPageTransition() {
     position: fixed; inset: 0; z-index: 999999;
     background: #04060F;
     pointer-events: none;
-    opacity: 0;
+    opacity: 1;
     transition: opacity 0.3s ease;
   `;
   document.body.appendChild(overlay);
 
   window.addEventListener('load', () => {
-    overlay.style.opacity = '1';
-    setTimeout(() => { overlay.style.opacity = '0'; }, 50);
+    overlay.style.opacity = '0';
   });
 
   document.querySelectorAll('a.btn').forEach(link => {
     link.addEventListener('click', (e) => {
       const href = link.getAttribute('href');
+      if (
+        e.defaultPrevented ||
+        e.button !== 0 ||
+        e.metaKey ||
+        e.ctrlKey ||
+        e.shiftKey ||
+        link.target === '_blank' ||
+        link.hasAttribute('download')
+      ) return;
       if (!href || href.startsWith('#')) return;
       e.preventDefault();
       overlay.style.opacity = '1';
@@ -472,7 +480,7 @@ function initPromiseParticles() {
       background:rgba(168,216,234,${Math.random() * 0.4 + 0.1});
       left:${Math.random() * 100}%;
       bottom:${Math.random() * 100}%;
-      animation: driftUp ${12 + Math.random() * 16}s linear infinite;
+      animation: drift-up ${12 + Math.random() * 16}s linear infinite;
       animation-delay: -${Math.random() * 20}s;
       box-shadow: 0 0 ${size * 3}px rgba(168,216,234,0.3);
     `;
@@ -517,7 +525,7 @@ function initTypewriter() {
 }
 
 function initMagneticButtons() {
-  document.querySelectorAll('.btn-primary:not(.runaway)').forEach(btn => {
+  document.querySelectorAll('.btn-primary:not(.runaway):not(#promisesNextBtn):not(.no-magnetic)').forEach(btn => {
     btn.addEventListener('mousemove', (e) => {
       const rect = btn.getBoundingClientRect();
       const cx = rect.left + rect.width / 2;
@@ -562,6 +570,7 @@ function initCardShimmer() {
     if (card.querySelector('.card-shimmer')) return;
     card.style.overflow = 'hidden';
     Array.from(card.children).forEach(child => {
+      if (child.matches('.btn-row') || child.querySelector('.runaway')) return;
       if (!child.classList.contains('card-shimmer')) child.style.position = child.style.position || 'relative';
       if (!child.classList.contains('card-shimmer')) child.style.zIndex = child.style.zIndex || '1';
     });
@@ -571,7 +580,7 @@ function initCardShimmer() {
       position:absolute; inset:0; pointer-events:none; z-index:0;
       background: linear-gradient(105deg, transparent 40%, rgba(168,216,234,0.07) 50%, transparent 60%);
       background-size: 200% 100%;
-      animation: borderShimmer 5s linear infinite;
+      animation: border-shimmer 5s linear infinite;
     `;
     card.appendChild(shimmer);
   });
@@ -589,7 +598,7 @@ function initEnvelopeGlow() {
     transform: translateX(-50%);
     width: 200px; height: 60px;
     background: radial-gradient(ellipse, rgba(212,104,138,0.4) 0%, transparent 70%);
-    animation: glowPulse 2s ease-in-out infinite;
+    animation: glow-pulse 2s ease-in-out infinite;
     pointer-events: none;
     z-index: 4;
     filter: blur(12px);
@@ -744,9 +753,9 @@ function createVoxelEnvelope() {
   voxelScene.add(envelopeGroup);
 
   const voxelSize = 1;
-  const whiteMat = new THREE.MeshStandardMaterial({ color: 0x080F1A, roughness: 0.8 });
+  const whiteMat = new THREE.MeshStandardMaterial({ color: 0xFFF8F0, roughness: 0.9 });
   const heartMat = new THREE.MeshStandardMaterial({ color: 0xD4688A, roughness: 0.5 });
-  const borderMat = new THREE.LineBasicMaterial({ color: 0xA8D8EA, linewidth: 2 });
+  const borderMat = new THREE.LineBasicMaterial({ color: 0xD4688A, linewidth: 2 });
 
   function addCube(x, y, z, mat, parent) {
     parent = parent || envelopeGroup;

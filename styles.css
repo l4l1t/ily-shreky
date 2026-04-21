@@ -76,7 +76,6 @@ body {
 
 .card:hover {
   box-shadow: var(--mc-shadow-lg), var(--mc-inset-shadow), 0 0 20px rgba(233,30,140,0.12);
-  transition: box-shadow 0.3s ease;
 }
 
 /* Soft romantic overlay */
@@ -166,6 +165,7 @@ body::after {
   background: rgba(255,240,248,0.9);
   border: var(--mc-border-thick);
   box-shadow: var(--mc-shadow-lg), var(--mc-inset-shadow);
+  transition: box-shadow 0.3s ease;
   padding: 24px 16px;
   max-width: 100%;
   width: 100%;
@@ -724,24 +724,24 @@ body::after {
   50% { transform: translateY(6px); }
 }
 
-@keyframes starFade {
-  from { opacity: 1; transform: scale(1); }
-  to { opacity: 0; transform: scale(0); }
+@keyframes star-fade {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0); }
 }
 
-@keyframes driftUp {
-  from { transform: translateY(0) translateX(0); opacity: 0; }
+@keyframes drift-up {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
   10% { opacity: 1; }
   90% { opacity: 0.6; }
-  to { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+  100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
 }
 
-@keyframes borderShimmer {
+@keyframes border-shimmer {
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
 }
 
-@keyframes glowPulse {
+@keyframes glow-pulse {
   0%, 100% { opacity: 0.4; transform: translateX(-50%) scaleX(1); }
   50% { opacity: 0.9; transform: translateX(-50%) scaleX(1.2); }
 }
