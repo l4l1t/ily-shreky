@@ -129,7 +129,7 @@ function createHeartBurst(x, y) {
     const heart = document.createElement('div');
     const color = COLOR_PALETTE.heartBurst[Math.floor(Math.random() * COLOR_PALETTE.heartBurst.length)];
     const encodedColor = encodeURIComponent(color);
-    const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 15 13' shape-rendering='crispEdges'><path fill='${encodedColor}' d='M3 0h3v1h1v1h1V1h1V0h3v1h1v1h1v4h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v-1h-1v-1h-1v-1h-1v-1h-1v-1h-1V2h1V1h1V0z'/></svg>`;
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 15 13' shape-rendering='crispEdges'><path fill='${encodedColor}' d='M3 0h3v1h1v1h1V1h1V0h3v1h1v1h1v4h-1v1h-1v1h-1v1h-1v1h-1v1[...]' /></svg>`;
     const size = Math.random() * 40 + 40; // large
 
     heart.style.cssText = `
@@ -174,7 +174,7 @@ function createMegaHeartBurst(x, y) {
     const heart = document.createElement('div');
     const color = COLOR_PALETTE.heartBurst[Math.floor(Math.random() * COLOR_PALETTE.heartBurst.length)];
     const encodedColor = encodeURIComponent(color);
-    const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 15 13' shape-rendering='crispEdges'><path fill='${encodedColor}' d='M3 0h3v1h1v1h1V1h1V0h3v1h1v1h1v4h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v-1h-1v-1h-1v-1h-1v-1h-1v-1h-1V2h1V1h1V0z'/></svg>`;
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 15 13' shape-rendering='crispEdges'><path fill='${encodedColor}' d='M3 0h3v1h1v1h1V1h1V0h3v1h1v1h1v4h-1v1h-1v1h-1v1h-1v1h-1v1[...]' /></svg>`;
     const size = Math.random() * 80 + 60; // much bigger
 
     heart.style.cssText = `
@@ -798,7 +798,7 @@ function initHeartTunnel() {
     heart.className = 'bg-heart-tunnel';
     const color = tunnelColors[tunnelHeartCount % tunnelColors.length];
     const encodedColor = encodeURIComponent(color);
-    const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 15 13' shape-rendering='crispEdges'><path fill='${encodedColor}' d='M3 0h3v1h1v1h1V1h1V0h3v1h1v1h1v4h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v-1h-1v-1h-1v-1h-1v-1h-1v-1h-1V2h1V1h1V0z'/></svg>`;
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 15 13' shape-rendering='crispEdges'><path fill='${encodedColor}' d='M3 0h3v1h1v1h1V1h1V0h3v1h1v1h1v4h-1v1h-1v1h-1v1h-1v1h-1v1[...]' /></svg>`;
     heart.style.backgroundImage = `url("data:image/svg+xml;utf8,${svg}")`;
     heart.style.animation = 'zoomTunnel 10s linear forwards';
     tunnelContainer.appendChild(heart);
@@ -814,7 +814,7 @@ function initHeartTunnel() {
     heart.className = 'bg-heart-tunnel';
     const color = tunnelColors[tunnelHeartCount % tunnelColors.length];
     const encodedColor = encodeURIComponent(color);
-    const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 15 13' shape-rendering='crispEdges'><path fill='${encodedColor}' d='M3 0h3v1h1v1h1V1h1V0h3v1h1v1h1v4h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v-1h-1v-1h-1v-1h-1v-1h-1v-1h-1V2h1V1h1V0z'/></svg>`;
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 15 13' shape-rendering='crispEdges'><path fill='${encodedColor}' d='M3 0h3v1h1v1h1V1h1V0h3v1h1v1h1v4h-1v1h-1v1h-1v1h-1v1h-1v1[...]' /></svg>`;
     heart.style.backgroundImage = `url("data:image/svg+xml;utf8,${svg}")`;
     heart.style.animation = 'zoomTunnel 10s linear forwards';
     heart.style.animationDelay = `-${Math.random() * 10}s`;
@@ -932,3 +932,88 @@ window.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
   });
 });
+
+// -------------------------
+// ADDED: Lily Rain effect
+// -------------------------
+/*
+  createLilyRain(originX, originY)
+  - performant WAAPI-based lily petal particle effect
+  - respects prefers-reduced-motion
+  - scales count on low-end devices
+*/
+function createLilyRain(originX, originY) {
+  // Respect prefers-reduced-motion
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  // Determine particle count (conservative on low-end devices)
+  const base = navigator.hardwareConcurrency || 4;
+  const isLow = (typeof isLowEndDevice !== 'undefined' && isLowEndDevice);
+  const count = isLow ? Math.min(20, base * 4) : Math.min(60, base * 12);
+
+  const petalColor = '#FADADD';
+
+  for (let i = 0; i < count; i++) {
+    const petal = document.createElement('div');
+    petal.className = 'lily-petal';
+
+    // sizing + placement
+    const size = 6 + Math.round(Math.random() * 8);
+    petal.style.width = `${size}px`;
+    petal.style.height = `${size}px`;
+    petal.style.left = `${originX}px`;
+    petal.style.top = `${originY}px`;
+    petal.style.background = petalColor;
+    petal.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 360}deg)`;
+    petal.style.opacity = '1';
+    petal.style.pointerEvents = 'none';
+    petal.style.willChange = 'transform, opacity';
+    petal.style.zIndex = 9999;
+
+    document.body.appendChild(petal);
+
+    const dx = (Math.random() - 0.5) * (80 + Math.random() * 220); // horizontal spread
+    const dy = 220 + Math.random() * 380; // fall distance
+    const rot = (Math.random() * 720) + 180;
+    const delay = Math.random() * 400;
+    const duration = 1600 + Math.random() * 1800;
+
+    const anim = petal.animate([
+      { transform: petal.style.transform + ' scale(1)', opacity: 1, offset: 0 },
+      { transform: `translate(${dx}px, ${dy * 0.5}px) rotate(${rot / 2}deg) scale(0.9)`, opacity: 0.85, offset: 0.5 },
+      { transform: `translate(${dx}px, ${dy}px) rotate(${rot}deg) scale(0.35)`, opacity: 0, offset: 1 }
+    ], {
+      duration,
+      delay,
+      easing: 'cubic-bezier(0.22,0.9,0.3,1)',
+      fill: 'forwards'
+    });
+
+    anim.onfinish = () => { if (petal && petal.parentNode) petal.remove(); };
+    // Safety cleanup in case onfinish doesn't fire
+    setTimeout(() => { if (petal && petal.parentNode) petal.remove(); }, duration + delay + 600);
+  }
+}
+
+/*
+  triggerLilyRainProposal(navigateAfterMs)
+  - call from the YES button to launch lily rain + existing celebrations
+  - then navigate (default ~1800ms)
+*/
+function triggerLilyRainProposal(navigateAfterMs = 1800) {
+  const yesBtn = document.getElementById('yesBtn3') || document.querySelector('#yesBtn');
+  if (!yesBtn) return;
+
+  const rect = yesBtn.getBoundingClientRect();
+  const x = rect.left + rect.width / 2;
+  const y = rect.top + rect.height / 2;
+
+  if (typeof createLilyRain === 'function') createLilyRain(x, y);
+  if (typeof createMegaHeartBurst === 'function') createMegaHeartBurst(x, y);
+
+  // quick visual feedback
+  yesBtn.animate([{ transform: 'scale(1.06)' }, { transform: 'scale(1)' }], { duration: 220, easing: 'ease-out' });
+
+  // Delay navigation so animation is visible
+  setTimeout(() => { window.location.href = 'step-promises.html'; }, navigateAfterMs);
+}
